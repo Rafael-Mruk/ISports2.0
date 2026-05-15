@@ -3,143 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin - EsporteBR</title>
+    <title>Painel Admin - EventSports</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
-    <header class="admin-header">
-        <div class="header-content">
-            <div class="logo">
-                <span class="logo-icon">⚽</span>
-                <h1>Esporte<span class="brasil">BR</span></h1>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-left">
+                        <a href="index.html" class="header-logo">
+                            <div class="logo-icon">⚽</div>
+                            <h1>Event<span style="color: var(--color-green);">Sports</span></h1>
+                        </a>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <div class="user-avatar" id="userAvatar">A</div>
+                            <span class="user-name" id="userName">Admin</span>
+                        </div>
+                        <button class="btn btn-logout" id="logoutBtn">
+                            <span>🚪</span>
+                            Sair
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="header-actions">
-                <button id="logout-btn" class="btn btn-outline btn-sm">
-                    <span class="btn-icon">🚪</span>
-                    Sair
-                </button>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Gerencie seus eventos esportivos</h1>
+                    <p class="hero-subtitle">Crie, organize e acompanhe todos os seus jogos em um só lugar</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-hero-primary" onclick="openModal('createEventModal')">
+                            <span class="btn-icon">➕</span>
+                            Criar Evento
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <!-- Main Content -->
-    <main class="admin-main">
-        <div class="container">
-            <!-- Stats Section -->
-            <section class="stats-section">
-                <div class="stat-card">
-                    <div class="stat-icon">📅</div>
-                    <div class="stat-info">
-                        <strong id="total-events">0</strong>
-                        <span>Total de Eventos</span>
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalEvents">0</div>
+                        <div class="stat-label">Total de Eventos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalParticipants">0</div>
+                        <div class="stat-label">Participantes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="activeEvents">0</div>
+                        <div class="stat-label">Eventos Ativos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="upcomingEvents">0</div>
+                        <div class="stat-label">Próximos Eventos</div>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-info">
-                        <strong id="total-participants">0</strong>
-                        <span>Participantes</span>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <section class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Seus Eventos</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="openModal('createEventModal')">
+                            <span class="btn-icon">➕</span>
+                            Novo Evento
+                        </button>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-info">
-                        <strong id="active-events">0</strong>
-                        <span>Ativos</span>
-                    </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="all">Todos</button>
+                    <button class="tab-button" data-tab="active">Ativos</button>
+                    <button class="tab-button" data-tab="upcoming">Próximos</button>
+                    <button class="tab-button" data-tab="completed">Finalizados</button>
                 </div>
-            </section>
 
-            <!-- Actions Bar -->
-            <section class="actions-bar">
-                <h2>Meus Eventos</h2>
-                <button class="btn btn-primary" onclick="openModal('create-event-modal')">
-                    <span class="btn-icon">➕</span>
-                    Criar Evento
-                </button>
-            </section>
+                <!-- Events Grid -->
+                <div class="cards-grid" id="eventsGrid"></div>
 
-            <!-- Events List -->
-            <section id="events-list" class="events-grid">
-                <!-- Events will be rendered here -->
-            </section>
-        </div>
-    </main>
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <div class="empty-state-icon">📅</div>
+                    <h3 class="empty-state-title">Nenhum evento encontrado</h3>
+                    <p class="empty-state-description">Comece criando seu primeiro evento esportivo!</p>
+                    <button class="btn btn-primary" onclick="openModal('createEventModal')">
+                        <span class="btn-icon">➕</span>
+                        Criar Primeiro Evento
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Create Event Modal -->
-    <div id="create-event-modal" class="modal">
-        <div class="modal-backdrop" data-close-modal></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Criar Novo Evento</h2>
-                <button class="modal-close" data-close-modal>×</button>
-            </div>
-            <form id="create-event-form" class="modal-body">
-                <div class="form-group">
-                    <label for="event-title">Título do Evento</label>
-                    <input type="text" id="event-title" required placeholder="Ex: Pelada de Sábado">
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="event-sport">Esporte</label>
-                        <select id="event-sport" required>
-                            <option value="futebol">Futebol</option>
-                            <option value="basquete">Basquete</option>
-                            <option value="volei">Vôlei</option>
-                            <option value="tenis">Tênis</option>
-                            <option value="outro">Outro</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="event-max">Máx. Participantes</label>
-                        <input type="number" id="event-max" min="2" max="100" value="22" required>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="event-date">Data</label>
-                        <input type="date" id="event-date" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="event-time">Horário</label>
-                        <input type="time" id="event-time" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-location">Localização</label>
-                    <input type="text" id="event-location" required placeholder="Endereço ou nome do local">
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-cost">Custo Total (R$)</label>
-                    <input type="number" id="event-cost" min="0" step="0.01" value="0" placeholder="0 = Grátis">
-                    <span class="form-hint">Valor total do evento (será dividido entre participantes)</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-description">Descrição</label>
-                    <textarea id="event-description" rows="3" placeholder="Detalhes adicionais sobre o evento"></textarea>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-close-modal>Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Criar Evento</button>
-                </div>
-            </form>
+    <div class="modal-backdrop" id="createEventModalBackdrop"></div>
+    <div class="modal" id="createEventModal">
+        <div class="modal-header">
+            <h2 class="modal-title">Criar Novo Evento</h2>
+            <button class="modal-close" onclick="closeModal('createEventModal')">×</button>
         </div>
+        <form id="createEventForm" class="modal-body">
+            <div class="form-group">
+                <label for="eventTitle">Nome do Evento</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📝</span>
+                    <input type="text" id="eventTitle" placeholder="Ex: Pelada de Sábado" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="eventSport">Esporte</label>
+                    <select id="eventSport" required>
+                        <option value="">Selecionar...</option>
+                        <option value="futebol">⚽ Futebol</option>
+                        <option value="basquete">🏀 Basquete</option>
+                        <option value="volei">🏐 Vôlei</option>
+                        <option value="tenis">🎾 Tênis</option>
+                        <option value="outro">🎯 Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="eventMaxPlayers">Máximo de Jogadores</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👥</span>
+                        <input type="number" id="eventMaxPlayers" min="2" max="100" value="22" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="eventDate">Data</label>
+                    <input type="date" id="eventDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventTime">Horário</label>
+                    <input type="time" id="eventTime" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="eventLocation">Localização</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📍</span>
+                    <input type="text" id="eventLocation" placeholder="Endereço ou nome do local" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="eventCost">Custo Total (R$)</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">R$</span>
+                    <input type="number" id="eventCost" min="0" step="0.01" value="0" placeholder="0 = Grátis">
+                </div>
+                <span class="form-hint">Valor total será dividido entre participantes</span>
+            </div>
+
+            <div class="form-group">
+                <label for="eventDescription">Descrição</label>
+                <textarea id="eventDescription" rows="3" placeholder="Detalhes adicionais sobre o evento"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createEventModal')">Cancelar</button>
+                <button type="submit" class="btn btn-primary">
+                    <span class="btn-text">Criar Evento</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+        </form>
     </div>
 
     <!-- Toast Container -->
-    <div id="toast-container" class="toast-container"></div>
+    <div class="toast-container" id="toastContainer"></div>
 
     <script src="script.js"></script>
 </body>
