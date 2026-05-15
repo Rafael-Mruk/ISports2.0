@@ -20,6 +20,7 @@ body{font-family:var(--font-family);line-height:1.6;color:var(--color-gray-800);
 .guest-description{font-size:0.875rem;color:var(--color-gray-600);margin-bottom:var(--spacing-4)}
 .login-footer{text-align:center;color:var(--color-gray-500);font-size:0.75rem}
 .login-footer a{color:var(--color-blue);text-decoration:none}
+.login-hint{background:var(--color-yellow);color:var(--color-gray-800);padding:var(--spacing-3);border-radius:var(--radius-lg);margin-bottom:var(--spacing-4);font-size:0.8125rem;font-weight:600}
 .login-background{position:absolute;inset:0;z-index:1;overflow:hidden}
 .bg-shape{position:absolute;border-radius:50%;opacity:0.1;animation:float 20s infinite}
 .bg-shape-1{width:300px;height:300px;background:var(--color-yellow);top:-150px;left:-150px}
@@ -43,9 +44,9 @@ header{background:var(--color-white);border-bottom:1px solid var(--color-gray-20
 .btn-lg{padding:var(--spacing-4) var(--spacing-6);font-size:1rem}
 .btn-full{width:100%}
 .form-group{margin-bottom:var(--spacing-5)}
-.form-label{display:block;font-size:0.875rem;font-weight:600;color:var(--color-gray-700);margin-bottom:var(--spacing-2)}
-.form-input{width:100%;padding:var(--spacing-3) var(--spacing-4);font-size:1rem;border:2px solid var(--color-gray-200);border-radius:var(--radius-lg);transition:border-color var(--transition-fast)}
-.form-input:focus{outline:none;border-color:var(--color-green);box-shadow:0 0 0 3px rgba(0,155,58,0.1)}
+.form-group label{display:block;font-size:0.875rem;font-weight:600;color:var(--color-gray-700);margin-bottom:var(--spacing-2)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:var(--spacing-3) var(--spacing-4);font-size:1rem;border:2px solid var(--color-gray-200);border-radius:var(--radius-lg);transition:border-color var(--transition-fast);font-family:var(--font-family)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--color-green);box-shadow:0 0 0 3px rgba(0,155,58,0.1)}
 .form-hint{font-size:0.75rem;color:var(--color-gray-500);margin-top:var(--spacing-1)}
 .card{background:var(--color-white);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);overflow:hidden}
 .card-header{padding:var(--spacing-5);border-bottom:1px solid var(--color-gray-100);background:var(--color-gray-50)}
@@ -108,4 +109,7 @@ header{background:var(--color-white);border-bottom:1px solid var(--color-gray-20
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes float{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-30px)}66%{transform:translate(-20px,20px)}}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite}
+.btn-loader{display:inline-flex;align-items:center;justify-content:center}
 @media(max-width:640px){.login-card{padding:var(--spacing-6)}.modal-footer{flex-direction:column}.modal-footer .btn{width:100%}}

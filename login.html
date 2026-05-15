@@ -55,40 +55,12 @@
                 </button>
             </form>
 
-            <div class="login-divider">
-                <span>ou</span>
-            </div>
-
-            <!-- Entrar como Convidado -->
-            <div class="guest-section">
-                <h3>Entrar como Convidado</h3>
-                <p class="guest-description">
-                    Não tem conta? Entre como convidado para visualizar e participar de eventos públicos.
-                </p>
-                
-                <form id="guestForm" class="guest-form">
-                    <div class="form-group">
-                        <label for="guestName">Seu Nome</label>
-                        <input 
-                            type="text" 
-                            id="guestName" 
-                            name="name" 
-                            placeholder="João Silva"
-                            required
-                            autocomplete="name"
-                            minlength="2"
-                        >
-                        <span class="form-hint">Este nome será usado para identificar você nos eventos</span>
-                    </div>
-
-                    <button type="submit" class="btn btn-secondary btn-full">
-                        <span class="btn-icon">👤</span>
-                        <span class="btn-text">Continuar como Convidado</span>
-                    </button>
-                </form>
-            </div>
-
             <div class="login-footer">
+                <p class="login-hint">
+                    <strong>Login de teste:</strong><br>
+                    E-mail: admin@admin.com<br>
+                    Senha: admin
+                </p>
                 <p>
                     <small>
                         Ao entrar, você concorda com nossos 
@@ -108,9 +80,44 @@
 
     <script src="script.js"></script>
     <script>
-        // Inicializa a página de login
-        document.addEventListener('DOMContentLoaded', () => {
-            initLoginPage();
+        // Script específico para a página de login
+        document.addEventListener('DOMContentLoaded', function() {
+            var loginForm = document.getElementById('loginForm');
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    var email = document.getElementById('loginEmail').value;
+                    var password = document.getElementById('loginPassword').value;
+                    var btn = this.querySelector('button[type="submit"]');
+                    var btnText = btn.querySelector('.btn-text');
+                    var btnLoader = btn.querySelector('.btn-loader');
+                    
+                    // Loading state
+                    btnText.style.display = 'none';
+                    btnLoader.style.display = 'inline';
+                    btn.disabled = true;
+                    
+                    // Simular autenticação
+                    setTimeout(function() {
+                        // Login de teste hardcoded
+                        if (email === 'admin@admin.com' && password === 'admin') {
+                            localStorage.setItem('userLoggedIn', 'true');
+                            localStorage.setItem('userEmail', email);
+                            localStorage.setItem('userName', 'Administrador');
+                            localStorage.setItem('userType', 'admin');
+                            
+                            window.location.href = 'index.html';
+                        } else {
+                            alert('E-mail ou senha inválidos!\n\nUse:\nE-mail: admin@admin.com\nSenha: admin');
+                            btnText.style.display = 'inline';
+                            btnLoader.style.display = 'none';
+                            btn.disabled = false;
+                        }
+                    }, 800);
+                });
+            }
         });
     </script>
 </body>
