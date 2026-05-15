@@ -1,298 +1,146 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Gerenciador de Eventos Esportivos - Crie e gerencie seus eventos esportivos com facilidade">
-  <meta name="theme-color" content="#009B3A">
-  <title>Gestão de Eventos Esportivos | Painel Admin</title>
-  
-  <!-- Preconnect para performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - EsporteBR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Toast Container -->
-  <div id="toast-container" class="toast-container" aria-live="polite"></div>
-
-  <!-- Modal Backdrop -->
-  <div id="modal-backdrop" class="modal-backdrop"></div>
-
-  <!-- Header -->
-  <header class="container">
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">⚽ Eventos Esportivos</h1>
-        <p class="page-subtitle">Gerencie seus eventos esportivos com facilidade</p>
-      </div>
-      <div class="flex gap-3">
-        <button id="btn-create-event" class="btn btn-primary btn-lg" data-action="create">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-          Novo Evento
-        </button>
-        <button id="btn-view-trash" class="btn btn-outline btn-lg" title="Lixeira">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="container">
-    <!-- Tabs de Navegação -->
-    <div class="tabs" role="tablist">
-      <button class="tab-button active" role="tab" aria-selected="true" data-tab="active">
-        📅 Ativos
-      </button>
-      <button class="tab-button" role="tab" aria-selected="false" data-tab="upcoming">
-        ⏳ Próximos
-      </button>
-      <button class="tab-button" role="tab" aria-selected="false" data-tab="completed">
-        ✅ Finalizados
-      </button>
-    </div>
-
-    <!-- Lista de Eventos -->
-    <div id="events-list" class="grid grid-cols-1">
-      <!-- Skeleton loading -->
-      <div class="skeleton skeleton-card"></div>
-      <div class="skeleton skeleton-card"></div>
-      <div class="skeleton skeleton-card"></div>
-    </div>
-
-    <!-- Empty State (hidden by default) -->
-    <div id="empty-state" class="empty-state hidden">
-      <div class="empty-state-icon">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-        </svg>
-      </div>
-      <h3 class="empty-state-title">Nenhum evento encontrado</h3>
-      <p class="empty-state-message">Crie seu primeiro evento esportivo clicando no botão "Novo Evento"</p>
-    </div>
-  </main>
-
-  <!-- Modal de Criar/Editar Evento -->
-  <div id="event-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal-header">
-      <h2 id="modal-title" class="modal-title">Novo Evento</h2>
-      <button class="modal-close" aria-label="Fechar modal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
-    <form id="event-form" class="modal-body">
-      <input type="hidden" id="event-id">
-      
-      <div class="form-group">
-        <label for="event-name" class="form-label">Nome do Evento *</label>
-        <input type="text" id="event-name" class="form-input" required placeholder="Ex: Futebol de Quinta">
-      </div>
-
-      <div class="form-group">
-        <label for="event-description" class="form-label">Descrição</label>
-        <textarea id="event-description" class="form-textarea" rows="3" placeholder="Detalhes sobre o evento..."></textarea>
-      </div>
-
-      <div class="grid grid-cols-1" style="gap: var(--spacing-4);">
-        <div class="form-group">
-          <label for="event-date" class="form-label">Data *</label>
-          <input type="date" id="event-date" class="form-input" required>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">⚽</span>
+                <h1>Esporte<span class="brasil">BR</span></h1>
+            </div>
+            <div class="header-actions">
+                <button id="logout-btn" class="btn btn-outline btn-sm">
+                    <span class="btn-icon">🚪</span>
+                    Sair
+                </button>
+            </div>
         </div>
+    </header>
 
-        <div class="form-group">
-          <label for="event-time" class="form-label">Horário *</label>
-          <input type="time" id="event-time" class="form-input" required>
+    <!-- Main Content -->
+    <main class="admin-main">
+        <div class="container">
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <strong id="total-events">0</strong>
+                        <span>Total de Eventos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <strong id="total-participants">0</strong>
+                        <span>Participantes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <strong id="active-events">0</strong>
+                        <span>Ativos</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions Bar -->
+            <section class="actions-bar">
+                <h2>Meus Eventos</h2>
+                <button class="btn btn-primary" onclick="openModal('create-event-modal')">
+                    <span class="btn-icon">➕</span>
+                    Criar Evento
+                </button>
+            </section>
+
+            <!-- Events List -->
+            <section id="events-list" class="events-grid">
+                <!-- Events will be rendered here -->
+            </section>
         </div>
-      </div>
+    </main>
 
-      <div class="form-group">
-        <label for="event-location" class="form-label">Localização *</label>
-        <input type="text" id="event-location" class="form-input" required placeholder="Endereço completo">
-        <p class="form-hint">O mapa será exibido após confirmar presença</p>
-      </div>
-
-      <div class="grid grid-cols-1" style="gap: var(--spacing-4);">
-        <div class="form-group">
-          <label for="event-max-players" class="form-label">Máximo de Jogadores *</label>
-          <input type="number" id="event-max-players" class="form-input" required min="2" max="100" value="22">
+    <!-- Create Event Modal -->
+    <div id="create-event-modal" class="modal">
+        <div class="modal-backdrop" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Criar Novo Evento</h2>
+                <button class="modal-close" data-close-modal>×</button>
+            </div>
+            <form id="create-event-form" class="modal-body">
+                <div class="form-group">
+                    <label for="event-title">Título do Evento</label>
+                    <input type="text" id="event-title" required placeholder="Ex: Pelada de Sábado">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-sport">Esporte</label>
+                        <select id="event-sport" required>
+                            <option value="futebol">Futebol</option>
+                            <option value="basquete">Basquete</option>
+                            <option value="volei">Vôlei</option>
+                            <option value="tenis">Tênis</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-max">Máx. Participantes</label>
+                        <input type="number" id="event-max" min="2" max="100" value="22" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-date">Data</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-time">Horário</label>
+                        <input type="time" id="event-time" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-location">Localização</label>
+                    <input type="text" id="event-location" required placeholder="Endereço ou nome do local">
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-cost">Custo Total (R$)</label>
+                    <input type="number" id="event-cost" min="0" step="0.01" value="0" placeholder="0 = Grátis">
+                    <span class="form-hint">Valor total do evento (será dividido entre participantes)</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-description">Descrição</label>
+                    <textarea id="event-description" rows="3" placeholder="Detalhes adicionais sobre o evento"></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Criar Evento</button>
+                </div>
+            </form>
         </div>
-
-        <div class="form-group">
-          <label for="event-cost" class="form-label">Custo por Pessoa (R$)</label>
-          <input type="number" id="event-cost" class="form-input" min="0" step="0.01" placeholder="0.00">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="event-duration" class="form-label">Duração da Partida (minutos)</label>
-        <input type="number" id="event-duration" class="form-input" min="1" max="180" value="60">
-      </div>
-
-      <div class="form-group">
-        <label class="toggle">
-          <input type="checkbox" id="event-require-login">
-          <span class="toggle-slider"></span>
-        </label>
-        <span class="form-label" style="display: inline; margin-left: var(--spacing-2);">Exigir login para criar evento</span>
-      </div>
-    </form>
-    <div class="modal-footer">
-      <button type="button" id="btn-cancel-event" class="btn btn-secondary flex-1">Cancelar</button>
-      <button type="submit" form="event-form" class="btn btn-primary flex-1">Salvar Evento</button>
     </div>
-  </div>
 
-  <!-- Modal de Detalhes do Evento -->
-  <div id="event-details-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="details-modal-title">
-    <div class="modal-header">
-      <h2 id="details-modal-title" class="modal-title">Detalhes do Evento</h2>
-      <button class="modal-close" aria-label="Fechar modal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div id="event-details-content">
-        <!-- Conteúdo carregado dinamicamente -->
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button id="btn-delete-event" class="btn btn-danger">Excluir</button>
-      <button id="btn-edit-event" class="btn btn-primary">Editar</button>
-    </div>
-  </div>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
 
-  <!-- Modal de Gerenciamento de Partida -->
-  <div id="match-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="match-modal-title">
-    <div class="modal-header">
-      <h2 id="match-modal-title" class="modal-title">Controle da Partida</h2>
-      <button class="modal-close" aria-label="Fechar modal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <!-- Timer -->
-      <div class="mb-4">
-        <div id="timer-display" class="timer-display timer-paused">00:00</div>
-      </div>
-
-      <!-- Controles do Timer -->
-      <div class="flex justify-center gap-3 mb-4">
-        <button id="btn-start-timer" class="btn btn-primary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-          Iniciar
-        </button>
-        <button id="btn-pause-timer" class="btn btn-warning hidden">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6 4h4v16H6zm8 0h4v16h-4z"/>
-          </svg>
-          Pausar
-        </button>
-        <button id="btn-reset-timer" class="btn btn-secondary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          Resetar
-        </button>
-      </div>
-
-      <!-- Apito -->
-      <div class="flex justify-center mb-4">
-        <button id="btn-whistle" class="btn btn-blue btn-lg">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 8v8M8 12h8"/>
-          </svg>
-          🔊 Apitar
-        </button>
-      </div>
-
-      <!-- Placar -->
-      <div class="divider">Placar</div>
-      
-      <div class="scoreboard mb-4">
-        <div class="score-team">
-          <div class="score-value" id="score-team-a">0</div>
-          <div class="score-label">Time A</div>
-        </div>
-        <div class="score-divider">-</div>
-        <div class="score-team">
-          <div class="score-value" id="score-team-b">0</div>
-          <div class="score-label">Time B</div>
-        </div>
-      </div>
-
-      <!-- Controles do Placar -->
-      <div class="flex justify-center gap-3 mb-4">
-        <button class="btn btn-secondary btn-add-goal" data-team="A">
-          + Gol A
-        </button>
-        <button class="btn btn-secondary btn-add-goal" data-team="B">
-          + Gol B
-        </button>
-      </div>
-
-      <!-- Sortear Times -->
-      <div class="divider">Times</div>
-      
-      <button id="btn-generate-teams" class="btn btn-warning w-full mb-4">
-        🎲 Sortear Times Aleatórios
-      </button>
-
-      <div id="teams-container">
-        <!-- Times gerados dinamicamente -->
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button id="btn-end-match" class="btn btn-danger w-full">Finalizar Partida</button>
-    </div>
-  </div>
-
-  <!-- Modal de Lixeira -->
-  <div id="trash-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="trash-modal-title">
-    <div class="modal-header">
-      <h2 id="trash-modal-title" class="modal-title">🗑️ Lixeira</h2>
-      <button class="modal-close" aria-label="Fechar modal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div id="trash-list">
-        <!-- Eventos deletados -->
-      </div>
-      <div id="trash-empty" class="empty-state hidden">
-        <div class="empty-state-icon">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-        </div>
-        <h3 class="empty-state-title">Lixeira vazia</h3>
-        <p class="empty-state-message">Eventos excluídos aparecerão aqui</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
