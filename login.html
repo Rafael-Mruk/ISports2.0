@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EsporteBR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <span class="logo-icon">⚽</span>
+                    <h1>Esporte<span class="brasil">BR</span></h1>
+                </div>
+                <p class="login-subtitle">Gerencie seus eventos esportivos com facilidade</p>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginEmail">E-mail</label>
+                    <input 
+                        type="email" 
+                        id="loginEmail" 
+                        name="email" 
+                        placeholder="seu@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                    <span class="form-hint">Digite seu e-mail de acesso</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input 
+                        type="password" 
+                        id="loginPassword" 
+                        name="password" 
+                        placeholder="••••••••"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span class="btn-text">Entrar</span>
+                    <span class="btn-loader" style="display: none;">
+                        <span class="spinner"></span>
+                    </span>
+                </button>
+            </form>
+
+            <div class="login-divider">
+                <span>ou</span>
+            </div>
+
+            <!-- Entrar como Convidado -->
+            <div class="guest-section">
+                <h3>Entrar como Convidado</h3>
+                <p class="guest-description">
+                    Não tem conta? Entre como convidado para visualizar e participar de eventos públicos.
+                </p>
+                
+                <form id="guestForm" class="guest-form">
+                    <div class="form-group">
+                        <label for="guestName">Seu Nome</label>
+                        <input 
+                            type="text" 
+                            id="guestName" 
+                            name="name" 
+                            placeholder="João Silva"
+                            required
+                            autocomplete="name"
+                            minlength="2"
+                        >
+                        <span class="form-hint">Este nome será usado para identificar você nos eventos</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary btn-full">
+                        <span class="btn-icon">👤</span>
+                        <span class="btn-text">Continuar como Convidado</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="login-footer">
+                <p>
+                    <small>
+                        Ao entrar, você concorda com nossos 
+                        <a href="#">Termos de Uso</a> e 
+                        <a href="#">Política de Privacidade</a>
+                    </small>
+                </p>
+            </div>
+        </div>
+
+        <div class="login-background">
+            <div class="bg-shape bg-shape-1"></div>
+            <div class="bg-shape bg-shape-2"></div>
+            <div class="bg-shape bg-shape-3"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Inicializa a página de login
+        document.addEventListener('DOMContentLoaded', () => {
+            initLoginPage();
+        });
+    </script>
+</body>
+</html>
