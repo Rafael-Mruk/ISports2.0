@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Funcionalidades</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #1a1a2e; color: white; }
+        .test-section { margin: 20px 0; padding: 20px; background: #16213e; border-radius: 8px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; background: #009B3A; color: white; border: none; border-radius: 4px; }
+        button:hover { background: #007A2E; }
+        input { padding: 8px; margin: 5px; border-radius: 4px; border: 1px solid #ccc; }
+        .result { margin-top: 10px; padding: 10px; background: #0f3460; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Teste de Correções</h1>
+    
+    <div class="test-section">
+        <h2>1. Teste de Logout</h2>
+        <button onclick="testLogout()">Simular Login e Logout</button>
+        <div id="logoutResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Teste de Criação de Evento</h2>
+        <input type="text" id="testTitle" placeholder="Nome do Evento" value="Pelada de Sábado">
+        <input type="date" id="testDate">
+        <input type="time" id="testStartTime" value="18:00">
+        <input type="time" id="testEndTime" value="20:00">
+        <button onclick="testCreateEvent()">Criar Evento Teste</button>
+        <div id="eventResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Links para Teste</h2>
+        <button onclick="window.open('login.html', '_blank')">Abrir Login</button>
+        <button onclick="window.open('index.html', '_blank')">Abrir Admin</button>
+        <button onclick="window.open('evento.html', '_blank')">Abrir Evento</button>
+    </div>
+
+    <script>
+        function testLogout() {
+            localStorage.setItem('current_user', JSON.stringify({
+                id: 'test123',
+                email: 'admin@admin.com',
+                name: 'Administrador',
+                type: 'admin',
+                isLoggedIn: true
+            }));
+            
+            var user = JSON.parse(localStorage.getItem('current_user'));
+            document.getElementById('logoutResult').innerHTML = 
+                '✅ Usuário logado: ' + user.name + '<br>' +
+                'Email: ' + user.email + '<br>' +
+                'Para testar logout, vá para index.html e clique em "Sair"';
+        }
+
+        function testCreateEvent() {
+            var STORAGE_KEY = 'sports_events_v2';
+            var events = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            
+            var newEvent = {
+                id: 'test_' + Date.now(),
+                title: document.getElementById('testTitle').value,
+                sport: 'futebol',
+                date: document.getElementById('testDate').value || new Date().toISOString().split('T')[0],
+                startTime: document.getElementById('testStartTime').value,
+                endTime: document.getElementById('testEndTime').value,
+                location: 'Campo Teste',
+                maxParticipants: 22,
+                costPerPerson: 50,
+                description: 'Evento de teste',
+                participants: [],
+                waitlist: [],
+                createdBy: 'admin',
+                createdAt: new Date().toISOString(),
+                status: 'active'
+            };
+            
+            events.push(newEvent);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+            
+            document.getElementById('eventResult').innerHTML = 
+                '✅ Evento criado com sucesso!<br>' +
+                'Nome: ' + newEvent.title + '<br>' +
+                'Data: ' + newEvent.date + '<br>' +
+                'Horário: ' + newEvent.startTime + ' - ' + newEvent.endTime + '<br>' +
+                'Total de eventos: ' + events.length;
+        }
+
+        // Verificar estado atual
+        window.onload = function() {
+            var user = JSON.parse(localStorage.getItem('current_user'));
+            var events = JSON.parse(localStorage.getItem('sports_events_v2')) || [];
+            console.log('Estado atual:', { user: user, eventCount: events.length });
+        };
+    </script>
+</body>
+</html>

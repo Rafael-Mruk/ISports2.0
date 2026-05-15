@@ -180,7 +180,7 @@ function renderEventsList() {
   if (!container) return;
 
   if (events.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><h3>Nenhum evento criado</h3><p>Crie seu primeiro evento esportivo!</p><button class="btn btn-primary" onclick="openModal(\'create-event-modal\')">Criar Evento</button></div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><h3>Nenhum evento criado</h3><p>Crie seu primeiro evento esportivo!</p><button class="btn btn-primary" onclick="openModal(\'createEventModal\')">Criar Evento</button></div>';
     return;
   }
 
@@ -191,7 +191,7 @@ function renderEventsList() {
       '<div class="event-card-header"><div class="event-sport-icon">' + getSportIcon(event.sport) + '</div>' +
       '<div class="event-status event-status-' + (event.status || 'active') + '">' + getStatusText(event.status) + '</div></div>' +
       '<h3 class="event-title">' + event.title + '</h3>' +
-      '<div class="event-info"><span class="event-date">📅 ' + formatDate(event.date) + '</span><span class="event-time">⏰ ' + event.time + '</span></div>' +
+      '<div class="event-info"><span class="event-date">📅 ' + formatDate(event.date) + '</span><span class="event-time">⏰ ' + (event.startTime || event.time) + '</span></div>' +
       '<div class="event-location">📍 ' + (event.location || 'Local nao definido') + '</div>' +
       '<div class="event-participants">👥 ' + (event.participants ? event.participants.length : 0) + '/' + (event.maxParticipants || 22) + ' participantes</div>' +
       '<div class="event-actions"><button class="btn btn-sm btn-secondary" onclick="viewEvent(\'' + event.id + '\')">Ver Detalhes</button>' +
@@ -212,7 +212,7 @@ function getStatusText(status) {
 }
 
 function setupEventListeners() {
-  var createForm = document.getElementById('create-event-form');
+  var createForm = document.getElementById('createEventForm');
   if (createForm) createForm.addEventListener('submit', handleCreateEvent);
 
   var logoutBtn = document.getElementById('logout-btn');
@@ -231,25 +231,26 @@ function handleCreateEvent(e) {
   e.preventDefault();
   var eventData = {
     id: generateId(),
-    title: document.getElementById('event-title').value,
-    sport: document.getElementById('event-sport').value,
-    date: document.getElementById('event-date').value,
-    time: document.getElementById('event-time').value,
-    location: document.getElementById('event-location').value,
-    maxParticipants: parseInt(document.getElementById('event-max').value) || 22,
-    costPerPerson: parseFloat(document.getElementById('event-cost').value) || 0,
-    description: document.getElementById('event-description').value,
+    title: document.getElementById('eventTitle').value,
+    sport: document.getElementById('eventSport').value,
+    date: document.getElementById('eventDate').value,
+    startTime: document.getElementById('eventStartTime').value,
+    endTime: document.getElementById('eventEndTime').value,
+    location: document.getElementById('eventLocation').value,
+    maxParticipants: parseInt(document.getElementById('eventMaxPlayers').value) || 22,
+    costPerPerson: parseFloat(document.getElementById('eventCost').value) || 0,
+    description: document.getElementById('eventDescription').value,
     participants: [],
     waitlist: [],
-    createdBy: currentUser.id,
+    createdBy: currentUser ? currentUser.id : 'admin',
     createdAt: new Date().toISOString(),
     status: 'active'
   };
   events.push(eventData);
   saveToStorage();
   showToast('success', 'Evento criado!', 'Seu evento foi criado com sucesso');
-  closeModal('create-event-modal');
-  document.getElementById('create-event-form').reset();
+  closeModal('createEventModal');
+  document.getElementById('createEventForm').reset();
   renderEventsList();
   updateDashboardStats();
 }
@@ -260,15 +261,16 @@ function editEvent(eventId) {
   var event = null;
   for (var i = 0; i < events.length; i++) { if (events[i].id === eventId) { event = events[i]; break; } }
   if (!event) return;
-  document.getElementById('event-title').value = event.title;
-  document.getElementById('event-sport').value = event.sport;
-  document.getElementById('event-date').value = event.date;
-  document.getElementById('event-time').value = event.time;
-  document.getElementById('event-location').value = event.location;
-  document.getElementById('event-max').value = event.maxParticipants;
-  document.getElementById('event-cost').value = event.costPerPerson;
-  document.getElementById('event-description').value = event.description || '';
-  openModal('create-event-modal');
+  document.getElementById('eventTitle').value = event.title;
+  document.getElementById('eventSport').value = event.sport;
+  document.getElementById('eventDate').value = event.date;
+  document.getElementById('eventStartTime').value = event.startTime || '';
+  document.getElementById('eventEndTime').value = event.endTime || '';
+  document.getElementById('eventLocation').value = event.location;
+  document.getElementById('eventMaxPlayers').value = event.maxParticipants;
+  document.getElementById('eventCost').value = event.costPerPerson;
+  document.getElementById('eventDescription').value = event.description || '';
+  openModal('createEventModal');
 }
 
 function deleteEvent(eventId) {
@@ -318,7 +320,14 @@ function renderEventDetails(event) {
   var el = document.getElementById('event-title-display'); if (el) el.textContent = event.title;
   el = document.getElementById('event-sport-display'); if (el) el.textContent = event.sport;
   el = document.getElementById('event-date-display'); if (el) el.textContent = formatDate(event.date);
-  el = document.getElementById('event-time-display'); if (el) el.textContent = event.time;
+  var timeDisplay = '';
+  if (event.startTime) {
+    timeDisplay = event.startTime;
+    if (event.endTime) timeDisplay += ' - ' + event.endTime;
+  } else if (event.time) {
+    timeDisplay = event.time;
+  }
+  el = document.getElementById('event-time-display'); if (el) el.textContent = timeDisplay || 'Horario nao definido';
   el = document.getElementById('event-location-display'); if (el) el.textContent = event.location || 'Local nao definido';
   el = document.getElementById('event-description-display'); if (el) el.textContent = event.description || 'Sem descricao';
   var participantsCount = event.participants ? event.participants.length : 0;
@@ -385,9 +394,9 @@ function setupEventPageListeners(event) {
     else { joinBtn.addEventListener('click', function() { handleJoinEvent(event); }); }
   }
   var addGuestBtn = document.getElementById('add-guest-btn');
-  if (addGuestBtn && currentUser) { addGuestBtn.addEventListener('click', function() { openModal('add-guest-modal'); }); }
+  if (addGuestBtn && currentUser) { addGuestBtn.addEventListener('click', function() { openModal('addGuestModal'); }); }
   else if (addGuestBtn) { addGuestBtn.style.display = 'none'; }
-  var guestForm = document.getElementById('add-guest-form');
+  var guestForm = document.getElementById('addGuestForm');
   if (guestForm) { guestForm.addEventListener('submit', function(e) { e.preventDefault(); handleAddGuest(event); }); }
   var backBtn = document.getElementById('back-to-admin');
   if (backBtn) { backBtn.addEventListener('click', function() { window.location.href = 'index.html'; }); }
@@ -408,7 +417,7 @@ function setupEventPageListeners(event) {
 
 function handleJoinEvent(event) {
   if (!currentUser) { showToast('warning', 'Atencao', 'Faca login para participar deste evento'); setTimeout(function() { window.location.href = 'login.html'; }, 1500); return; }
-  if (isEventLocked(event.date, event.time)) { showToast('warning', 'Evento bloqueado', 'Nao e possivel participar 1h antes do inicio'); return; }
+  if (isEventLocked(event.date, event.startTime || event.time)) { showToast('warning', 'Evento bloqueado', 'Nao e possivel participar 1h antes do inicio'); return; }
   var participantData = { id: currentUser.id, name: currentUser.name, email: currentUser.email || '', joinedAt: new Date().toISOString() };
   if (event.participants.length >= event.maxParticipants) { event.waitlist.push(participantData); showToast('info', 'Lista de espera', 'Voce foi adicionado a lista de espera'); }
   else { event.participants.push(participantData); showToast('success', 'Confirmado!', 'Sua presenca foi confirmada'); }
@@ -425,8 +434,8 @@ function handleAddGuest(event) {
   if (event.participants.length >= event.maxParticipants) { event.waitlist.push(guestData); showToast('info', 'Convidado adicionado', 'Na lista de espera'); }
   else { event.participants.push(guestData); showToast('success', 'Convidado adicionado', guestName + ' foi adicionado ao evento'); }
   saveToStorage();
-  closeModal('add-guest-modal');
-  document.getElementById('add-guest-form').reset();
+  closeModal('addGuestModal');
+  document.getElementById('addGuestForm').reset();
   renderParticipants(event);
 }
 
