@@ -94,54 +94,69 @@ function getToastIcon(type) {
 function openModal(modalId) {
   var modal = document.getElementById(modalId);
   if (!modal) return;
-  modal.classList.add('modal-open');
+  modal.classList.add('active');
+  var backdrop = modal.querySelector('.modal-backdrop');
+  if (backdrop) backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function closeModal(modalId) {
   var modal = document.getElementById(modalId);
   if (!modal) return;
-  modal.classList.remove('modal-open');
+  modal.classList.remove('active');
+  var backdrop = modal.querySelector('.modal-backdrop');
+  if (backdrop) backdrop.classList.remove('active');
   document.body.style.overflow = '';
 }
 
 function initLoginPage() {
   console.log('Login page initialized');
   
+  // Verificar se já está logado
   var savedUser = getCurrentUser();
   if (savedUser) {
     window.location.href = 'index.html';
     return;
   }
 
+  // Configurar formulário de login
   var loginForm = document.getElementById('loginForm');
   if (loginForm) {
-    loginForm.addEventListener('submit', handleLogin);
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = document.getElementById('loginEmail').value;
+      var password = document.getElementById('loginPassword').value;
+      var btn = loginForm.querySelector('button[type="submit"]');
+      var btnText = btn.querySelector('.btn-text');
+      var btnLoader = btn.querySelector('.btn-loader');
+      
+      // Loading state
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'inline';
+      btn.disabled = true;
+      
+      setTimeout(function() {
+        // Login de teste hardcoded
+        if (email === 'admin@admin.com' && password === 'admin') {
+          var user = { 
+            id: generateId(), 
+            email: email, 
+            name: 'Administrador', 
+            type: 'admin', 
+            isLoggedIn: true 
+          };
+          setCurrentUser(user);
+          showToast('success', 'Login realizado!', 'Bem-vindo ao EsporteBR');
+          setTimeout(function() { window.location.href = 'index.html'; }, 1000);
+        } else {
+          alert('E-mail ou senha inválidos!\n\nUse:\nE-mail: admin@admin.com\nSenha: admin');
+          btnText.style.display = 'inline';
+          btnLoader.style.display = 'none';
+          btn.disabled = false;
+        }
+      }, 800);
+    });
   }
-
-  var guestForm = document.getElementById('guestForm');
-  if (guestForm) {
-    guestForm.addEventListener('submit', handleGuestLogin);
-  }
-}
-
-function handleLogin(e) {
-  e.preventDefault();
-  var email = document.getElementById('loginEmail').value;
-  var user = { id: generateId(), email: email, name: email.split('@')[0], type: 'admin', isLoggedIn: true };
-  setCurrentUser(user);
-  showToast('success', 'Login realizado!', 'Bem-vindo ao EsporteBR');
-  setTimeout(function() { window.location.href = 'index.html'; }, 1000);
-}
-
-function handleGuestLogin(e) {
-  e.preventDefault();
-  var name = document.getElementById('guestName').value.trim();
-  if (!name) { showToast('error', 'Erro', 'Digite seu nome para continuar'); return; }
-  var user = { id: generateId(), name: name, type: 'guest', isLoggedIn: true };
-  setCurrentUser(user);
-  showToast('success', 'Bem-vindo!', 'Ola, ' + name);
-  setTimeout(function() { window.location.href = 'index.html'; }, 1000);
 }
 
 function logout() {
